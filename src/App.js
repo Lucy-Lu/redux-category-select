@@ -1,26 +1,47 @@
 import React from 'react';
-import logo from './logo.svg';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+
+import SearchCategory from './SearchCategory';
+import AddressSearch from './AddressSearch';
+
+import {changeCategory} from './action';
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        const {actions,category}=this.props;
+        console.log("******props are : ", this.props)
+        let search;
+        if(category =='female'){
+            search =<AddressSearch category={category}/>
+        }else{
+            search = <h1>Search for male</h1>
+        }
+        return (
+            <div className="App">
+                <SearchCategory actions={actions} category={category}/>
+                {search}
+            </div>
+        );
+    }
+
 }
 
-export default App;
+function mapStateToProps(state) {
+    return{category:state.category}
+
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        actions:bindActionCreators({changeCategory:changeCategory},dispatch)
+    }
+}
+
+export default App = connect(mapStateToProps,mapDispatchToProps)(App);
